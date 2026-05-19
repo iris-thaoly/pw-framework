@@ -1,0 +1,33 @@
+import { Page } from '@playwright/test';
+import { click, fill, check } from '../utils/actionUtils';
+import { setPage } from '../utils/pageUtils';
+import { isContained, tobeVisible } from '../utils/assertionUtils';
+
+export class LoginPage {
+    readonly page: Page;
+
+    constructor(page: Page) {
+        this.page = page;
+        setPage(page);
+    }
+
+    readonly loginTitle = "//h2[text() = 'Login to your account']";
+    readonly emailInput = "//input[@data-qa = 'login-email']";
+    readonly passwordInput = "//input[@data-qa = 'login-password']";
+    readonly loginButton = "//button[@data-qa = 'login-button']";
+    readonly loginErrorMessage = "//p[text() = 'Your email or password is incorrect!']";
+
+    async verifyLoginVisible() {
+        await tobeVisible(this.loginTitle);
+    }
+
+    async login(email: string, password: string) {
+        await fill(this.emailInput, email);
+        await fill(this.passwordInput, password);
+        await click(this.loginButton);
+    }
+
+    async verifyLoginErrorMessage() {
+        await tobeVisible(this.loginErrorMessage);
+    }
+}

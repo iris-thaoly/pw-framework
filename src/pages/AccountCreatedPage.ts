@@ -1,28 +1,28 @@
-import { expect, Locator, Page } from '@playwright/test';
-import { BasePage } from './BasePage';
+import { Page } from '@playwright/test';
+import {click, fill} from '../utils/actionUtils';
+import { setPage } from '../utils/pageUtils';
+import { isContained, tobeVisible } from '../utils/assertionUtils';
 
-export class AccountCreatedPage extends BasePage {
-  readonly accountCreatedTitle: Locator;
-  readonly accountDeletedTitle: Locator;
-  readonly continueButton: Locator;
+export class AccountCreatedPage {
 
+  readonly page: Page;
   constructor(page: Page) {
-    super(page);
-
-    this.accountCreatedTitle = page.locator("//b[text() = 'Account Created!']");
-    this.accountDeletedTitle = page.locator("//b[text() = 'Account Deleted!']");
-    this.continueButton = page.locator("//a[@data-qa = 'continue-button']");
+    this.page = page;
+    setPage(page);
   }
+    readonly accountCreatedTitle = "//b[text() = 'Account Created!']";
+    readonly accountDeletedTitle = "//b[text() = 'Account Deleted!']";
+    readonly continueButton = "//a[@data-qa = 'continue-button']";
 
   async verifyAccountCreatedVisible() {
-    await expect(this.accountCreatedTitle).toBeVisible();
+    await tobeVisible(this.accountCreatedTitle);
   }
 
   async verifyAccountDeletedVisible() {
-    await expect(this.accountDeletedTitle).toBeVisible();
+    await tobeVisible(this.accountDeletedTitle);
   }
 
   async clickContinue() {
-    await this.continueButton.click();
+    await click(this.continueButton);
   }
 }
