@@ -1,107 +1,86 @@
-import { expect, Locator, Page } from '@playwright/test';
-import { BasePage } from './BasePage';
+import { Page } from '@playwright/test';
+import { click, fill, check } from '../utils/actionUtils';
+import { setPage } from '../utils/pageUtils';
+import { isContained, tobeVisible } from '../utils/assertionUtils';
 
-export class SignupLoginPage extends BasePage {
-  readonly newUserSignupTitle: Locator;
-  readonly signupNameInput: Locator;
-  readonly signupEmailInput: Locator;
-  readonly signupButton: Locator;
 
-  readonly enterAccountInformationTitle: Locator;
-  readonly titleRadio: Locator;
-  readonly nameInput: Locator;
-  readonly emailInput: Locator;
-  readonly passwordInput: Locator;
-  readonly dayDropdown: Locator;
-  readonly monthDropdown: Locator;
-  readonly yearDropdown: Locator;
-  readonly newsletterCheckbox: Locator;
-  readonly specialOffersCheckbox: Locator;
-
-  readonly firstNameInput: Locator;
-  readonly lastNameInput: Locator;
-  readonly companyInput: Locator;
-  readonly addressInput: Locator;
-  readonly address2Input: Locator;
-  readonly countryDropdown: Locator;
-  readonly stateInput: Locator;
-  readonly cityInput: Locator;
-  readonly zipcodeInput: Locator;
-  readonly mobileNumberInput: Locator;
-  readonly createAccountButton: Locator;
+export class SignupLoginPage {
+  readonly page: Page;
 
   constructor(page: Page) {
-    super(page);
-
-    this.newUserSignupTitle = page.locator("//h2[text() = 'New User Signup!']");
-    this.signupNameInput = page.locator("//input[@data-qa = 'signup-name']");
-    this.signupEmailInput = page.locator("//input[@data-qa = 'signup-email']");
-    this.signupButton = page.locator("//button[@data-qa = 'signup-button']");
-
-    this.enterAccountInformationTitle = page.locator("//b[text() = 'Enter Account Information']");
-    this.titleRadio = page.locator("//input[@id = 'id_gender2']");
-    this.nameInput = page.locator("//input[@id = 'name']");
-    this.emailInput = page.locator("//input[@id = 'email']");
-    this.passwordInput = page.locator("//input[@id = 'password']");
-    this.dayDropdown = page.locator("//select[@id = 'days']");
-    this.monthDropdown = page.locator("//select[@id = 'months']");
-    this.yearDropdown = page.locator("//select[@id = 'years']");
-    this.newsletterCheckbox = page.locator("//input[@id = 'newsletter']");
-    this.specialOffersCheckbox = page.locator("//input[@id = 'optin']");
-
-    this.firstNameInput = page.locator("//input[@id = 'first_name']");
-    this.lastNameInput = page.locator("//input[@id = 'last_name']");
-    this.companyInput = page.locator("//input[@id = 'company']");
-    this.addressInput = page.locator("//input[@id = 'address1']");
-    this.address2Input = page.locator("//input[@id = 'address2']");
-    this.countryDropdown = page.locator("//select[@id = 'country']");
-    this.stateInput = page.locator("//input[@id = 'state']");
-    this.cityInput = page.locator("//input[@id = 'city']");
-    this.zipcodeInput = page.locator("//input[@id = 'zipcode']");
-    this.mobileNumberInput = page.locator("//input[@id = 'mobile_number']");
-    this.createAccountButton = page.locator("//button[@type = 'submit' and contains(., 'Create Account')]");
+    this.page = page;
+    setPage(page);
   }
 
+  readonly newUserSignupTitle = "//h2[text() = 'New User Signup!']";
+  readonly signupNameInput = "//input[@data-qa = 'signup-name']";
+  readonly signupEmailInput = "//input[@data-qa = 'signup-email']";
+  readonly signupButton = "//button[@data-qa = 'signup-button']";
+
+  readonly enterAccountInformationTitle = "//b[text() = 'Enter Account Information']";
+  readonly titleRadio = "//input[@type = 'radio' and @id = 'id_gender2']";
+  readonly nameInput = "//input[@id = 'name']";
+  readonly emailInput = "//input[@id = 'email']";
+  readonly passwordInput = "//input[@id = 'password']";
+  readonly dayDropdown = "//select[@id = 'days']";
+  readonly monthDropdown = "//select[@id = 'months']";
+  readonly yearDropdown = "//select[@id = 'years']";
+  readonly newsletterCheckbox = "//input[@id = 'newsletter']";
+  readonly specialOffersCheckbox = "//input[@id = 'optin']";
+
+  readonly firstNameInput = "//input[@id = 'first_name']";
+  readonly lastNameInput = "//input[@id = 'last_name']";
+  readonly companyInput = "//input[@id = 'company']";
+  readonly addressInput = "//input[@id = 'address1']";
+  readonly address2Input = "//input[@id = 'address2']";
+  readonly countryDropdown = "//select[@id = 'country']";
+  readonly stateInput = "//input[@id = 'state']";
+  readonly cityInput = "//input[@id = 'city']";
+  readonly zipcodeInput = "//input[@id = 'zipcode']";
+  readonly mobileNumberInput = "//input[@id = 'mobile_number']";
+  readonly createAccountButton = "//button[@type = 'submit' and contains(., 'Create Account')]";
+
+
   async verifyNewUserSignupVisible() {
-    await expect(this.newUserSignupTitle).toBeVisible();
+    await tobeVisible(this.newUserSignupTitle);
   }
 
   async submitNewUserSignup(name: string, email: string) {
-    await this.signupNameInput.fill(name);
-    await this.signupEmailInput.fill(email);
-    await this.signupButton.click();
+    await fill(this.signupNameInput, name);
+    await fill(this.signupEmailInput, email);
+    await click(this.signupButton);
   }
 
   async verifyEnterAccountInformationVisible() {
-    await expect(this.enterAccountInformationTitle).toBeVisible();
+    await tobeVisible(this.enterAccountInformationTitle);
   }
 
   async fillAccountInformation(name: string, email: string, password: string) {
-    await this.titleRadio.check();
-    await this.nameInput.fill(name);
-    await expect(this.emailInput).toHaveValue(email);
-    await this.passwordInput.fill(password);
-    await this.dayDropdown.selectOption('10');
-    await this.monthDropdown.selectOption('May');
-    await this.yearDropdown.selectOption('1995');
-    await this.newsletterCheckbox.check();
-    await this.specialOffersCheckbox.check();
+    await check(this.titleRadio);
+    await fill(this.nameInput, name);
+    await tobeVisible(this.emailInput);
+    await fill(this.passwordInput, password);
+    await click(this.dayDropdown);
+    await click(this.monthDropdown);
+    await click(this.yearDropdown);
+    await click(this.newsletterCheckbox);
+    await click(this.specialOffersCheckbox);
   }
 
   async fillAddressInformation() {
-    await this.firstNameInput.fill('Auto');
-    await this.lastNameInput.fill('User');
-    await this.companyInput.fill('Demo Company');
-    await this.addressInput.fill('123 Test Street');
-    await this.address2Input.fill('Suite 456');
-    await this.countryDropdown.selectOption('Canada');
-    await this.stateInput.fill('Ontario');
-    await this.cityInput.fill('Toronto');
-    await this.zipcodeInput.fill('100000');
-    await this.mobileNumberInput.fill('1234567890');
+    await fill(this.firstNameInput, 'Auto');
+    await fill(this.lastNameInput, 'User');
+    await fill(this.companyInput, 'Demo Company');
+    await fill(this.addressInput, '123 Test Street');
+    await fill(this.address2Input, 'Suite 456');
+    await click(this.countryDropdown);
+    await fill(this.stateInput, 'Ontario');
+    await fill(this.cityInput, 'Toronto');
+    await fill(this.zipcodeInput, '100000');
+    await fill(this.mobileNumberInput, '1234567890');
   }
 
   async createAccount() {
-    await this.createAccountButton.click();
+    await click(this.createAccountButton);
   }
 }
