@@ -3,8 +3,7 @@ import { getPage } from './pageUtils';
 
 export async function tobeVisible(locator: string) {
     const page = getPage();
-    const isVisible = await page.locator(locator).isVisible();
-    await expect(isVisible).toBeTruthy();
+    await expect(page.locator(locator)).toBeVisible();
 }
 
 export async function isContained(locator: string, text: string) {

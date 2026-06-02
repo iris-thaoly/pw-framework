@@ -2,9 +2,10 @@ import { Page } from '@playwright/test';
 import { click, fill, check } from '../utils/actionUtils';
 import { setPage } from '../utils/pageUtils';
 import { isContained, tobeVisible } from '../utils/assertionUtils';
+import { step } from '../utils/testStepUtils';
 
 
-export class SignupLoginPage {
+export class SignupFormPage {
   readonly page: Page;
 
   constructor(page: Page) {
@@ -41,20 +42,24 @@ export class SignupLoginPage {
   readonly createAccountButton = "//button[@type = 'submit' and contains(., 'Create Account')]";
 
 
+  @step('Verify New User Signup section is visible')
   async verifyNewUserSignupVisible() {
     await tobeVisible(this.newUserSignupTitle);
   }
 
+  @step('Submit new user signup information')
   async submitNewUserSignup(name: string, email: string) {
     await fill(this.signupNameInput, name);
     await fill(this.signupEmailInput, email);
     await click(this.signupButton);
   }
 
+  @step('Verify enter account information section is visible')
   async verifyEnterAccountInformationVisible() {
     await tobeVisible(this.enterAccountInformationTitle);
   }
 
+  @step('Fill account information')
   async fillAccountInformation(name: string, email: string, password: string) {
     await check(this.titleRadio);
     await fill(this.nameInput, name);
@@ -67,6 +72,7 @@ export class SignupLoginPage {
     await click(this.specialOffersCheckbox);
   }
 
+  @step('Fill address information')
   async fillAddressInformation() {
     await fill(this.firstNameInput, 'Auto');
     await fill(this.lastNameInput, 'User');
@@ -80,7 +86,17 @@ export class SignupLoginPage {
     await fill(this.mobileNumberInput, '1234567890');
   }
 
+  @step('Create account')
   async createAccount() {
     await click(this.createAccountButton);
+  }
+
+  @step('Complete signup and account creation')
+  async completeSignup(name: string, email: string, password: string) {
+    await this.submitNewUserSignup(name, email);
+    await this.verifyEnterAccountInformationVisible();
+    await this.fillAccountInformation(name, email, password);
+    await this.fillAddressInformation();
+    await this.createAccount();
   }
 }
