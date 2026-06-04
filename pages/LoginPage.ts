@@ -18,6 +18,11 @@ export class LoginPage {
     readonly loginButton = "//button[@data-qa = 'login-button']";
     readonly loginErrorMessage = "//p[text() = 'Your email or password is incorrect!']";
 
+    @step('Navigate to login page')
+    async gotoLoginPage(url: string) {
+        await this.page.goto(url);
+    }
+
     @step('Verify login form is visible')
     async verifyLoginVisible() {
         await tobeVisible(this.loginTitle);
