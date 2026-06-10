@@ -1,5 +1,5 @@
 import { test } from '@playwright/test';
-import { ProductsPage } from '../../../src/pages/ProductsPage';
+import { ProductsPage } from '../../../pages/products.page';
 
 test.describe('Product List', () => {
     test('TC07 - Verify that all products are visible and product details are correct', async ({ page }) => {

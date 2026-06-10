@@ -2,7 +2,7 @@ import { HomePage } from "../pages/HomePage";
 import { LoginPage } from "../pages/LoginPage";
 import { SignupFormPage } from "../pages/SignupFormPage";
 import { AccountCreatedPage } from "../pages/AccountCreatedPage";
-import { Locator, Page, test as baseTest } from "@playwright/test";
+import { Page, test as baseTest } from "@playwright/test";
 import { setPage, closePage } from "../utils/pageUtils";
 import { loadEnv } from "./env";
 import { env } from "../utils/envUtils";
@@ -41,10 +41,14 @@ export const test = baseTest.extend<MyFixtures>({
     //db
   },
   homePage: async ({ page }, use) => {
-    await use(new HomePage(page));
+    const homePage = new HomePage(page);
+    await homePage.gotoSignupLoginPage(url);
+    await use(homePage);
   },
   signupFormPage: async ({ page }, use) => {
-    await use(new SignupFormPage(page));
+    const signupFormPage = new SignupFormPage(page);
+    await signupFormPage.verifyNewUserSignupVisible();
+    await use(signupFormPage);
   },
   accountCreatedPage: async ({ page }, use) => {
     await use(new AccountCreatedPage(page));
